@@ -19,8 +19,9 @@ export const authOptions = {
   callbacks: {
     async signIn({ user }) {
       const { email } = user;
-      try {
-        await sendVerificationEmail(email, "Verify your email", "Please verify your email!");
+      try { 
+        await sendVerificationEmail(email, "own khan","verify",
+          "<span>Verify</span><h1>You are Verify!</h1><p>Click  to verify your email.</p>");
         return true;
       } catch (error) {
         console.error("Error sending verification email:", error);
