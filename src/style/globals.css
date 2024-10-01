@@ -1,0 +1,88 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.container-1 {
+  max-width: 1024px;
+  margin: auto;
+  padding: 5px 16px;
+}
+
+.card {
+  background-color: rgb(231, 231, 231);
+  border-radius: 6px;
+  padding: 10px;
+  max-width: 500px;
+  margin: auto;
+}
+
+.btn {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border-radius: 0.25rem;
+  width: 100%;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 600;
+  color: #ffffff;
+  text-transform: uppercase;
+  background-color: #10B981;
+  transition: all 0.2s linear;
+}
+
+.btn:hover {
+  background-color: #047857;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+
+.form-sign {
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 400px;
+  margin: auto;
+}
+
+button {
+  width: 100%
+}
+
+.form-sign input {
+  border: 1.5px solid grey;
+  border-radius: 5px;
+  color: #2e4369;
+  font-size: 16px;
+  font-weight: 500;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  padding-left: 12px;
+  padding-right: 40px;
+  margin-top: 0px;
+  width: 100%;
+}
