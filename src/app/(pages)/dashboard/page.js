@@ -15,13 +15,13 @@ const Dashboard = () => {
                 <h1>Welcome, {session.user.email}!</h1>
 
                 <button className="btn my-2" onClick={() => {
-                            signOut({
-                                redirect: true,
-                                callbackUrl: '/login'
-                            });
-                        }}>
-                            Logout
-                        </button>
+                    signOut({
+                        redirect: true,
+                        callbackUrl: '/login'
+                    });
+                }}>
+                    Logout
+                </button>
             </div>
         );
     }

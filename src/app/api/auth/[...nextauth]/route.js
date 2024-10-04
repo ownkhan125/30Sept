@@ -19,9 +19,42 @@ export const authOptions = {
   callbacks: {
     async signIn({ user }) {
       const { email } = user;
-      try { 
-        await sendVerificationEmail(email, "own khan","verify",
-          "<span>Verify</span><h1>You are Verify!</h1><p>Click  to verify your email.</p>");
+      try {
+        await sendVerificationEmail(email, "own khan", "verify",
+          `<div class="font-sans text-gray-800 max-w-lg mx-auto p-5 border border-gray-300 rounded-lg">
+    <table role="presentation" class="w-full border-spacing-0">
+        <tr>
+            <td class="bg-blue-600 p-5 text-center rounded-t-lg">
+                <h1 class="text-white m-0">Welcome to Our Service!</h1>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="p-5 bg-white">
+                <p>Dear [User],</p>
+                <p>We are excited to have you on board. Please verify your email address by clicking the button below.</p>
+
+                <div class="text-center my-5">
+                    <a href="https://your-verification-link.com" class="bg-green-600 text-white py-3 px-5 rounded-lg inline-block">Verify Email</a>
+                </div>
+
+                <p>If you did not sign up for this service, you can safely ignore this email.</p>
+
+                <img src="https://w0.peakpx.com/wallpaper/979/89/HD-wallpaper-purple-smile-design-eye-smily-profile-pic-face.jpg" alt="Thank You" class="w-full max-w-md rounded-lg block mx-auto my-5" />
+
+                <p>Best regards,<br>Your Company Team</p>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="bg-gray-100 p-5 text-center rounded-b-lg text-gray-500">
+                <p class="m-0 text-xs">You received this email because you signed up for our service. If you wish to unsubscribe, <a href="#" class="text-blue-600">click here</a>.</p>
+                <p class="m-0 text-xs">&copy; 2024 Your Company. All rights reserved.</p>
+            </td>
+        </tr>
+    </table>
+</div>
+`);
         return true;
       } catch (error) {
         console.error("Error sending verification email:", error);

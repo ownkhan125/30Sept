@@ -84,7 +84,7 @@ const page = () => {
                     </div>
 
                     <div className="flex items-center justify-between my-3" >
-                        <button
+                        <button 
                             className="btn"
                             type="submit"
                         >

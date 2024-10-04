@@ -4,6 +4,7 @@ import { BiShowAlt, BiSolidHide } from "react-icons/bi";
 import { useForm } from "react-hook-form";
 import React, { useState } from 'react'
 import { signIn } from "next-auth/react";
+import Link from "next/link";
 
 const page = () => {
     const [active, setActive] = useState();
@@ -55,13 +56,17 @@ const page = () => {
                         </button>
                     </div>
 
-                    <div className="flex items-center justify-between" >
+                    <div className="flex items-center justify-between">
                         <button
                             className="btn"
                             onClick={() => signIn("google", { callbackUrl: '/dashboard' })}
                         >
                             Login with Google
                         </button>
+                    </div>
+
+                    <div className="p-2">
+                        <Link href={'/forgetpassword'}>< button className="text-blue-800 text-start underline underline-offset-1">Forget Password...?</button></Link>
                     </div>
 
                 </form>
