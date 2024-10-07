@@ -1,3 +1,5 @@
+import { connectDB } from "@/connectDB/connectDB";
+import { User } from "@/models/User";
 import { sendVerificationEmail } from "@/utils/sendEmail";
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
@@ -17,7 +19,23 @@ export const authOptions = {
     signOut: "/"
   },
   callbacks: {
-    async signIn({ user }) {
+    async signIn({ user, account, profile }) {
+      if (account.provider === 'google') {
+        try {
+          await connectDB();
+
+          const user = await new User({
+            username: profile.name,
+            email: profile.email,
+            password: profile.at_hash
+          })
+
+          await user.save();
+
+        } catch (error) {
+          console.log(error.message);
+        }
+      }
       const { email } = user;
       try {
         await sendVerificationEmail(email, "own khan", "verify",

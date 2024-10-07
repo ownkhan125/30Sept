@@ -20,13 +20,13 @@ const Page = () => {
             });
 
             if (res.ok) {
-                // router.push('/dashboard'); 
+                router.push('/login');
                 console.log('Email sent successfully!');
             } else {
-                const errorMessage = await res.text(); 
-                alert(errorMessage); 
+                const errorMessage = await res.text();
+                alert(errorMessage);
             }
-          
+
         } catch (error) {
             console.error('Request failed:', error);
         }

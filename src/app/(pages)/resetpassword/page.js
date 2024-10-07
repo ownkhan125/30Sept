@@ -31,6 +31,7 @@ const Page = () => {
     const {
         register,
         handleSubmit,
+        reset,
         formState: { errors }
     } = useForm({
         resolver: yupResolver(validationSchema),
@@ -57,7 +58,7 @@ const Page = () => {
             });
 
             if (res.ok) {
-                // router.push('/dashboard');
+                reset();
                 console.log("Your password has been reset successfully");
             }
         } catch (error) {

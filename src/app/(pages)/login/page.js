@@ -5,9 +5,11 @@ import { useForm } from "react-hook-form";
 import React, { useState } from 'react'
 import { signIn } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const page = () => {
     const [active, setActive] = useState();
+    const router = useRouter();
 
     const Show = () => {
         setActive(!active);
@@ -17,7 +19,22 @@ const page = () => {
 
 
     const handleSubmitData = async (data) => {
-        console.log(data);
+        try {
+            const res = await fetch('/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ data })
+            })
+            if (res.ok) {
+                router.push('/dashboard')
+            }
+            else if (res.status) {
+                alert('incorrect password')
+            }
+
+        } catch (error) {
+            console.log(error.message);
+        }
     }
 
 
@@ -35,6 +52,7 @@ const page = () => {
                             Email
                         </label>
                         <input required type='email' placeholder='enter email here...' {...register("email")} />
+
                     </div>
 
 
