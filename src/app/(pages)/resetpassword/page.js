@@ -2,7 +2,7 @@
 
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useForm } from "react-hook-form";
 import { BiShowAlt, BiSolidHide } from "react-icons/bi";
 import * as Yup from 'yup';
@@ -20,7 +20,7 @@ const validationSchema = Yup.object().shape({
         .min(6, 'Password must be at least 6 characters')
 });
 
-const Page = () => {
+const ResetPage = () => {
     const searchParam = useSearchParams();
     const [active, setActive] = useState();
     const [isLoading, setIsLoading] = useState(false);
@@ -103,4 +103,13 @@ const Page = () => {
     );
 };
 
-export default Page;
+
+const page = () => {
+    return (
+        <Suspense fallback={<p>Loading</p>}>
+            <ResetPage/>
+        </Suspense>
+    )
+}
+
+export default page;
