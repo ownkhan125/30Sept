@@ -11,21 +11,22 @@ const Page = () => {
         const email = data.email;
 
         try {
-            const res = await fetch('/api/sendEmail', {
+            const res = await fetch('/api/auth/sendEmail', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    to: email,
-                    subject: 'Verification Code',
-                    html: `<button>Verification</button>`
-                }),
+                body: JSON.stringify({ email }),
             });
 
             if (res.ok) {
                 // router.push('/dashboard'); 
+                console.log('Email sent successfully!');
+            } else {
+                const errorMessage = await res.text(); 
+                alert(errorMessage); 
             }
+          
         } catch (error) {
             console.error('Request failed:', error);
         }

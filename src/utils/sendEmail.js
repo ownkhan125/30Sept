@@ -12,16 +12,17 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-const sendVerificationEmail = async (to, subject, text, html) => {
+const sendVerificationEmail = async (to, subject, html) => {
+
     const mailOptions = {
         from: process.env.EMAIL_USER,
         to,
         subject,
-        text,
         html,
     };
 
     try {
+        
         const info = await transporter.sendMail(mailOptions);
         console.log("Message sent: %s", info.messageId);
     } catch (error) {

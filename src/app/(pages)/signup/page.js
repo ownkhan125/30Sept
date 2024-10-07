@@ -29,7 +29,7 @@ const page = () => {
 
 
     const validationSchema = Yup.object().shape({
-        name: Yup.string()
+        username: Yup.string()
             .required('Name is required')
             .min(3, 'Name must be at least 3 characters'),
         email: Yup.string()
@@ -60,7 +60,7 @@ const page = () => {
                         <label className="block text-gray-700 text-sm font-bold mb-2" >
                             Username
                         </label>
-                        <input type='name' placeholder='enter username here...' {...register("name")} />
+                        <input type='username' placeholder='enter username here...' {...register("username")} />
                         {errors.name && <p className="text-red-500">{errors.name.message}</p>}
                     </div>
 
