@@ -20,20 +20,27 @@ const page = () => {
 
     const handleSubmitData = async (data) => {
         try {
-            const res = await fetch('/api/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ data })
-            })
-            if (res.ok) {
-                router.push('/dashboard')
+            const result = await signIn(
+                'Verify',
+                {
+                    ...data,
+                    redirect: false
+                }
+            );
+
+            if (result?.ok) {
+                router.push('/dashboard');
             }
-            else if (res.status) {
+            else if (result.status) {
                 alert('incorrect password')
             }
+            else {
+                router.push('/login');
+            }
+
 
         } catch (error) {
-            console.log(error.message);
+            console.log('Login page:', error?.message);
         }
     }
 
@@ -52,7 +59,6 @@ const page = () => {
                             Email
                         </label>
                         <input required type='email' placeholder='enter email here...' {...register("email")} />
-
                     </div>
 
 

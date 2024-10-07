@@ -3,9 +3,39 @@ import { User } from "@/models/User";
 import { sendVerificationEmail } from "@/utils/sendEmail";
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
+import CredentialsProvider from 'next-auth/providers/credentials';
+import { signIn } from "next-auth/react";
 
 export const authOptions = {
   providers: [
+    CredentialsProvider({
+      name: 'Credentials',
+      id: 'Verify',
+      credentials: {
+        email: { label: "Email", type: "email", placeholder: "Enter your email" },
+        password: { label: "Password", type: "password", placeholder: "Enter your password" }
+      },
+      async authorize(credentials, req) {
+        try {
+          await connectDB();
+          const { email, password } = credentials;
+          const user = await User.findOne({ email: email })
+          if (user) {
+            if (password === user.password) {
+              return user;
+            } else {
+              throw new Error('Incorrect password', {status: 401});
+            }
+          }
+
+        } catch (error) {
+          console.log("catch error", error?.message);
+          return null
+        }
+      }
+    }),
+
+    // start Google provider
     GoogleProvider({
       clientId: process.env.GOOGLE_ID,
       clientSecret: process.env.GOOGLE_SECRET,
@@ -15,7 +45,7 @@ export const authOptions = {
 
 
   pages: {
-    signIn: '/auth/dashboard',
+    signIn: '/dashboard',
     signOut: "/"
   },
   callbacks: {
@@ -40,7 +70,7 @@ export const authOptions = {
       try {
         await sendVerificationEmail(email, "own khan", "verify",
           `<div class="font-sans text-gray-800 max-w-lg mx-auto p-5 border border-gray-300 rounded-lg">
-    <table role="presentation" class="w-full border-spacing-0">
+            <table role="presentation" class="w-full border-spacing-0">
         <tr>
             <td class="bg-blue-600 p-5 text-center rounded-t-lg">
                 <h1 class="text-white m-0">Welcome to Our Service!</h1>
@@ -70,9 +100,8 @@ export const authOptions = {
                 <p class="m-0 text-xs">&copy; 2024 Your Company. All rights reserved.</p>
             </td>
         </tr>
-    </table>
-</div>
-`);
+       </table>
+          </div>`);
         return true;
       } catch (error) {
         console.error("Error sending verification email:", error);
