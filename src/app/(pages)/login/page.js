@@ -2,13 +2,16 @@
 
 import { BiShowAlt, BiSolidHide } from "react-icons/bi";
 import { useForm } from "react-hook-form";
-import React, { useState } from 'react'
+import React, { Suspense, useState } from 'react'
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import Loading from "@/app/loading";
+
 
 const page = () => {
     const [active, setActive] = useState();
+    const [loading, setLoading] = useState();
     const router = useRouter();
 
     const Show = () => {
@@ -19,6 +22,7 @@ const page = () => {
 
 
     const handleSubmitData = async (data) => {
+        setLoading(true)
         try {
             const result = await signIn(
                 'Verify',
@@ -28,11 +32,13 @@ const page = () => {
                 }
             );
 
+
             if (result?.ok) {
                 router.push('/dashboard');
             }
             else if (result.status) {
                 alert('incorrect password')
+                setLoading(false)
             }
             else {
                 router.push('/login');
@@ -76,18 +82,20 @@ const page = () => {
                             className="btn"
                             type="submit"
                         >
-                            Login
+                            {loading ? <Loading /> : 'Login'}
                         </button>
                     </div>
 
                     <div className="flex items-center justify-between">
-                        <button
-                            className="btn"
-                            onClick={() => signIn("google", { callbackUrl: '/dashboard' })}
-                        >
-                            Login with Google
-                        </button>
-                    </div>
+                        <Suspense fallback={<Loading />}>
+                            <button
+                                className="btn"
+                                onClick={() => { signIn("google", { callbackUrl: '/dashboard' }), setLoading(true) }}
+                            >
+                                {loading ? <Loading /> : 'Login with Google'}
+                            </button>
+                        </Suspense>
+                    </div>  
 
                     <div className="p-2">
                         <Link href={'/forgetpassword'}>< button className="text-blue-800 text-start underline underline-offset-1">Forget Password...?</button></Link>

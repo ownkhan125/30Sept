@@ -20,7 +20,7 @@ const validationSchema = Yup.object().shape({
         .min(6, 'Password must be at least 6 characters')
 });
 
-const ResetPage = () => {
+const ResetPage = () => {   
     const searchParam = useSearchParams();
     const [active, setActive] = useState();
     const [isLoading, setIsLoading] = useState(false);
@@ -32,7 +32,7 @@ const ResetPage = () => {
         register,
         handleSubmit,
         reset,
-        formState: { errors }
+        formState: { errors }   
     } = useForm({
         resolver: yupResolver(validationSchema),
     });
@@ -81,7 +81,7 @@ const ResetPage = () => {
                                 New Password
                             </label>
                             <input type={active ? 'text' : 'password'} placeholder='enter new password here...' {...register("newpassword")} />
-                            {errors.newpassword && <p className="text-red-500">{errors.newpassword.message}</p>}
+                            {errors.newpassword && <p className="text-red-500 duration-100">{errors.newpassword.message}</p>}
                             <div className={`${active ? 'hidden' : 'block'} absolute top-10 right-2 text-2xl cursor-pointer`} onClick={() => Show()}><BiSolidHide /></div>
                             <div className={`${active ? 'block' : 'hidden'} absolute top-10 right-2 text-2xl cursor-pointer`} onClick={() => Show()}><BiShowAlt /></div>
                         </div>
@@ -107,7 +107,7 @@ const ResetPage = () => {
 const page = () => {
     return (
         <Suspense fallback={<p>Loading</p>}>
-            <ResetPage/>
+            <ResetPage />
         </Suspense>
     )
 }
