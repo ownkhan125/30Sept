@@ -70,7 +70,7 @@ const ResetPage = () => {
 
     return (
         <>
-            <div className='container-1'>
+            <div className='container-1 '>
                 <form onSubmit={handleSubmit(handleSubmitData)}>
                     <div className='form-sign'>
                         <div className='p-1 text-center font-bold'>
