@@ -2,15 +2,15 @@
 
 import Loading from "@/app/loading";
 import { signOut, useSession } from "next-auth/react";
-import React, { Suspense, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 
-const Dashboard = () => {
+const page = () => {
     const [data, setData] = useState();
+    const [item, setItem] = useState('own');
     const { data: session, status } = useSession();
 
     const addItem = async () => {
-        const input = document.querySelector('#item')
-        setData(input.value);
+        const input = document.querySelector('#item');
         try {
             const res = await fetch('/api/dashboard', {
                 method: 'POST',
@@ -19,38 +19,80 @@ const Dashboard = () => {
                 },
                 body: JSON.stringify({ data })
             })
+            input.value = '';
 
         } catch (error) {
-
+            console.log('dashboard page:', error.message);
         }
 
     }
 
+    const handleSubmit = () => {
+        const input = document.querySelector('#item');
+        const Value = input.value;
+        setData(Value);
+    }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const res = await fetch('/api/dashboard', {
+                    method: 'GET'
+                })
+                const response = await res.json();
+                setItem(response[0].items);
+                console.log(item);
+            } catch (error) {
+                console.log(error.message);
+            }
+        };
+        fetchData()
+    }, []);
+
+
 
     if (session) {
         return (
-            <div className="card text-center form-sign">
-                <h1 className="font-semibold">PROFILE PAGE</h1>
-                <h2>Welcome, {session.user.name}!</h2>
-                <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" >
-                        Item
-                    </label>
-                    <input required type='text' placeholder='enter item here...' id='item' />
+            <div className="container-1">
+                <div className="card form-sign">
+                    <div className="w-fit mx-auto"><h1 className="font-semibold">PROFILE PAGE</h1></div>
+                    <h2>Welcome, {session.user.name}!</h2>
+                    <div className="mb-4">
+                        <label className="block text-gray-700 text-sm font-bold mb-2" >
+                            Item
+                        </label>
+                        <input type='text' placeholder='enter item here...' id='item' onChange={handleSubmit} />
+
+                        {/* <textarea placeholder="hey" class="text-grey-darkest  p-2 m-1 bg-transparent" name="tt">hello world</textarea> */}
+                    </div>
+
+                    <button className="btn my-2" onClick={() => addItem()}>
+                        Add Item
+                    </button>
+
+                    <button className="btn my-2" onClick={() => {
+                        signOut({
+                            redirect: true,
+                            callbackUrl: '/login'
+                        });
+                    }}>
+                        Logout
+                    </button>
                 </div>
 
-                <button className="btn my-2" onClick={() => addItem()}>
-                    Add Item
-                </button>
 
-                <button className="btn my-2" onClick={() => {
-                    signOut({
-                        redirect: true,
-                        callbackUrl: '/login'
-                    });
-                }}>
-                    Logout
-                </button>
+                <div className="items">
+                    {
+                        // item.map((items) => (
+                        //     <div key={items.id} className="item-card">
+                        //         <div><p>{items.name}</p></div>
+                        //         <div></div>
+                        //     </div>
+                        // ))
+                    }
+
+
+                </div>
             </div>
         );
     }
@@ -59,4 +101,4 @@ const Dashboard = () => {
 
 };
 
-export default Dashboard;
+export default page;

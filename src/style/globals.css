@@ -86,3 +86,19 @@ button {
   margin-top: 0px;
   width: 100%;
 }
+
+.items {
+  padding: 10px;
+  border-radius: 5px;
+  background-color: rgb(227, 237, 246);
+  width: 100%;
+}
+
+.item-card {
+  padding: 10px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 0px;
+}
