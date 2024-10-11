@@ -29,7 +29,6 @@ export const POST = async (req) => {
     }
 }
 
-
 export const GET = async () => {
     try {
         await connectDB();

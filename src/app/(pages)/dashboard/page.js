@@ -3,6 +3,8 @@
 import Loading from "@/app/loading";
 import { signOut, useSession } from "next-auth/react";
 import React, { Suspense, useEffect, useState } from "react";
+import { FaUserEdit } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
 
 const page = () => {
     const [data, setData] = useState();
@@ -92,6 +94,8 @@ const page = () => {
                 </div>
 
 
+
+
                 <div className="items mt-5">
                     <h2 className="text-center font-bold">Items Record</h2>
                     <div className="overflow-auto max-h-[300px] designed-scrollbar px-7 my-10">
@@ -99,7 +103,15 @@ const page = () => {
                             item.map((items, index) => (
                                 <div key={index} className="item-card">
                                     <div><p>{items.name}</p></div>
-                                    <div></div>
+                                    <div className="flex gap-2 items-center">
+                                        <div className="p-1 cursor-pointer">
+                                            <FaUserEdit />
+                                        </div>
+
+                                        <div className="p-1 text-red-700 cursor-pointer">
+                                            <MdDelete />
+                                        </div>
+                                    </div>
                                 </div>
                             ))
                         }
