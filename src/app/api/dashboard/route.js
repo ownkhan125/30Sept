@@ -23,7 +23,7 @@ export const POST = async (req) => {
             await user.save();
         }
         // const users = await UserData.find();
-        return NextResponse.json('successfull', { status: 200 })
+        return NextResponse.json(user, { status: 200 })
     } catch (error) {
         return NextResponse.json(error?.message, { status: 500 })
     }
@@ -33,8 +33,9 @@ export const POST = async (req) => {
 export const GET = async () => {
     try {
         await connectDB();
-        const users = await UserData.find()
-        return NextResponse.json(users, { status: 200 })
+        const session = await getServerSession();
+        const user = await UserData.findOne({ email: session.user.email })
+        return NextResponse.json(user, { status: 200 })
     } catch (error) {
         return NextResponse.json(error?.message, { status: 500 })
     }

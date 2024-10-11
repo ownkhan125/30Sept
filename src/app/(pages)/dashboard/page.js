@@ -6,8 +6,27 @@ import React, { Suspense, useEffect, useState } from "react";
 
 const page = () => {
     const [data, setData] = useState();
-    const [item, setItem] = useState('own');
+    const [item, setItem] = useState([]);
     const { data: session, status } = useSession();
+
+
+
+    useEffect(() => {
+        fetchData()
+    }, []);
+
+    const fetchData = async () => {
+        try {
+            const res = await fetch('/api/dashboard', {
+                method: 'GET'
+            })
+            const response = await res.json();
+            setItem(response.items);
+        } catch (error) {
+            console.log(error.message);
+        }
+    };
+
 
     const addItem = async () => {
         const input = document.querySelector('#item');
@@ -19,6 +38,8 @@ const page = () => {
                 },
                 body: JSON.stringify({ data })
             })
+            console.log(item);
+            fetchData()
             input.value = '';
 
         } catch (error) {
@@ -32,22 +53,6 @@ const page = () => {
         const Value = input.value;
         setData(Value);
     }
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const res = await fetch('/api/dashboard', {
-                    method: 'GET'
-                })
-                const response = await res.json();
-                setItem(response[0].items);
-                console.log(item);
-            } catch (error) {
-                console.log(error.message);
-            }
-        };
-        fetchData()
-    }, []);
 
 
 
@@ -81,17 +86,18 @@ const page = () => {
                 </div>
 
 
-                <div className="items">
-                    {
-                        // item.map((items) => (
-                        //     <div key={items.id} className="item-card">
-                        //         <div><p>{items.name}</p></div>
-                        //         <div></div>
-                        //     </div>
-                        // ))
-                    }
-
-
+                <div className="items mt-5">
+                    <h2 className="text-center font-bold">Items Record</h2>
+                    <div className="overflow-auto max-h-[300px] designed-scrollbar px-7 my-10">
+                        {
+                            item.map((items, index) => (
+                                <div key={index} className="item-card">
+                                    <div><p>{items.name}</p></div>
+                                    <div></div>
+                                </div>
+                            ))
+                        }
+                    </div>
                 </div>
             </div>
         );

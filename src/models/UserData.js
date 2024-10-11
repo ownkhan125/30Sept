@@ -9,7 +9,7 @@ const UserSchema = new mongoose.Schema({
     items: [{
         name: {
             type: String,
-            required: true
+            required: true,
         },
     }]
 }, { timestamps: true });
