@@ -66,7 +66,13 @@ const page = () => {
                         <label className="block text-gray-700 text-sm font-bold mb-2" >
                             Item
                         </label>
-                        <input type='text' placeholder='enter item here...' id='item' onChange={handleSubmit} />
+                        <input
+                            type='text'
+                            placeholder='enter item here...'
+                            id='item'
+                            onChange={handleSubmit}
+                            onKeyDown={(e) => e.key === 'Enter' && addItem()}
+                        />
 
                         {/* <textarea placeholder="hey" class="text-grey-darkest  p-2 m-1 bg-transparent" name="tt">hello world</textarea> */}
                     </div>
