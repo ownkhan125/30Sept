@@ -51,8 +51,8 @@ export const authOptions = {
   },
   callbacks: {
     async signIn({ user, account, profile }) {
-      const existingUser = await User.findOne({ email: user.email })
-      console.log('exit user', existingUser);
+      let existingUser = await User.findOne({ email: user.email });
+      user.id = existingUser._id;
       if (account.provider === 'google') {
         try {
           await connectDB();
@@ -113,14 +113,14 @@ export const authOptions = {
     },
     async jwt({ token, user }) {
       if (user) {
-
-        token.id = existingUser._id
-        console.log('token ki id ', existingUser);
+        token.id = user.id
         token.email = user.email;
       }
       return token;
     },
     async session({ session, token }) {
+      session.user.userId = token;
+      console.log('token ki id ', session.user);
       session.user.email = token.email;
       return session;
     },
