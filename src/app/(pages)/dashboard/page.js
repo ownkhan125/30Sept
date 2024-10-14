@@ -61,60 +61,67 @@ const page = () => {
     if (session) {
         return (
             <div className="container-1">
-                <div className="card form-sign">
-                    <div className="w-fit mx-auto"><h1 className="font-semibold">PROFILE PAGE</h1></div>
-                    <h2>Welcome, {session.user.name}!</h2>
-                    <div className="mb-4">
-                        <label className="block text-gray-700 text-sm font-bold mb-2" >
-                            Item
-                        </label>
-                        <input
-                            type='text'
-                            placeholder='enter item here...'
-                            id='item'
-                            onChange={handleSubmit}
-                            onKeyDown={(e) => e.key === 'Enter' && addItem()}
-                        />
 
-                        {/* <textarea placeholder="hey" class="text-grey-darkest  p-2 m-1 bg-transparent" name="tt">hello world</textarea> */}
+                {/* <div className="w-[25%] h-[100%]">
+
+                </div> */}
+
+                <div>
+                    <div className="card form-sign">
+                        <div className="w-fit mx-auto"><h1 className="font-semibold">PROFILE PAGE</h1></div>
+                        <h2>Welcome, {session.user.name}!</h2>
+                        <div className="mb-4">
+                            <label className="block text-gray-700 text-sm font-bold mb-2" >
+                                Item
+                            </label>
+                            <input
+                                type='text'
+                                placeholder='enter item here...'
+                                id='item'
+                                onChange={handleSubmit}
+                                onKeyDown={(e) => e.key === 'Enter' && addItem()}
+                            />
+
+                            {/* <textarea placeholder="hey" class="text-grey-darkest  p-2 m-1 bg-transparent" name="tt">hello world</textarea> */}
+                        </div>
+
+                        <button className="btn my-2" onClick={() => addItem()}>
+                            Add Item
+                        </button>
+
+                        <button className="btn my-2" onClick={() => {
+                            signOut({
+                                redirect: true,
+                                callbackUrl: '/login'
+                            });
+                        }}>
+                            Logout
+                        </button>
                     </div>
 
-                    <button className="btn my-2" onClick={() => addItem()}>
-                        Add Item
-                    </button>
-
-                    <button className="btn my-2" onClick={() => {
-                        signOut({
-                            redirect: true,
-                            callbackUrl: '/login'
-                        });
-                    }}>
-                        Logout
-                    </button>
-                </div>
 
 
 
+                    <div className="items mt-5">
+                        <h2 className="text-center font-bold">Items Record</h2>
+                        <div className="overflow-auto max-h-[300px] designed-scrollbar px-7 my-10">
+                            {
+                                item.map((items, index) => (
+                                    <div key={index} className="item-card">
+                                        <div><p>{items.name}</p></div>
+                                        <div className="flex gap-2 items-center">
+                                            <div className="p-1 cursor-pointer">
+                                                <FaUserEdit />
+                                            </div>
 
-                <div className="items mt-5">
-                    <h2 className="text-center font-bold">Items Record</h2>
-                    <div className="overflow-auto max-h-[300px] designed-scrollbar px-7 my-10">
-                        {
-                            item.map((items, index) => (
-                                <div key={index} className="item-card">
-                                    <div><p>{items.name}</p></div>
-                                    <div className="flex gap-2 items-center">
-                                        <div className="p-1 cursor-pointer">
-                                            <FaUserEdit />
-                                        </div>
-
-                                        <div className="p-1 text-red-700 cursor-pointer">
-                                            <MdDelete />
+                                            <div className="p-1 text-red-700 cursor-pointer">
+                                                <MdDelete />
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            ))
-                        }
+                                ))
+                            }
+                        </div>
                     </div>
                 </div>
             </div>
