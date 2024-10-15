@@ -19,6 +19,7 @@ export const POST = async (req) => {
         else {
             user = new UserData({
                 _id: session.user.userId,
+                email: session.user.email,
                 items: [{ name: data }]
             })
             await user.save();
@@ -40,3 +41,7 @@ export const GET = async () => {
         return NextResponse.json(error?.message, { status: 500 })
     }
 }
+
+
+
+
