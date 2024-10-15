@@ -120,7 +120,6 @@ export const authOptions = {
     },
     async session({ session, token }) {
       session.user.userId = token.userId;
-      console.log('save token in session ', session.user);
       session.user.email = token.email;
       return session;
     },

@@ -16,16 +16,18 @@ const UserSchema = new mongoose.Schema({
         name: {
             type: String,
             required: true,
+
         },
+        privacy: {
+            type: String,
+            enum: ['public', 'private'],
+            default: 'public'
+        }
     }],
 
-    privacy: {
-        type: String,
-        enum: ['public', 'private'],
-        default: 'public'
-    }
 
-   
+
+
 
 }, { timestamps: true });
 
