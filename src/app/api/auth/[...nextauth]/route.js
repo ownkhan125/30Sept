@@ -113,13 +113,13 @@ export const authOptions = {
     },
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id
+        token.userId = user.id
         token.email = user.email;
       }
       return token;
     },
     async session({ session, token }) {
-      session.user.userId = token;
+      session.user.userId = token.userId;
       console.log('save token in session ', session.user);
       session.user.email = token.email;
       return session;

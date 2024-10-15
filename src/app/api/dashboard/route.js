@@ -2,6 +2,7 @@ import { connectDB } from "@/connectDB/connectDB"
 import { UserData } from "@/models/UserData";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server"
+import { authOptions } from "../auth/[...nextauth]/route";
 
 
 
@@ -9,15 +10,15 @@ export const POST = async (req) => {
     try {
         await connectDB();
         const { data } = await req.json();
-        const session = await getServerSession();
-        let user = await UserData.findOne({ email: session.user.email })
+        const session = await getServerSession(authOptions);
+        let user = await UserData.findOne({ _id: session.user.userId })
         if (user) {
             user.items.push({ name: data })
             await user.save();
         }
         else {
             user = new UserData({
-                email: session.user.email,
+                _id: session.user.userId,
                 items: [{ name: data }]
             })
             await user.save();
@@ -32,8 +33,8 @@ export const POST = async (req) => {
 export const GET = async () => {
     try {
         await connectDB();
-        const session = await getServerSession();
-        const user = await UserData.findOne({ email: session.user.email })
+        const session = await getServerSession(authOptions);
+        const user = await UserData.findOne({ _id: session.user.userId })
         return NextResponse.json(user, { status: 200 })
     } catch (error) {
         return NextResponse.json(error?.message, { status: 500 })
