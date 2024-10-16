@@ -1,5 +1,5 @@
 import { connectDB } from '@/connectDB/connectDB';
-import { User } from '@/models/User';
+import { User } from "@/models/user.model";
 import { sendVerificationEmail } from '@/utils/sendEmail';
 import { NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';

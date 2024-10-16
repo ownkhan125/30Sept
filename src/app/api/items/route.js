@@ -1,41 +1,77 @@
+import { connectDB } from "@/connectDB/connectDB";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../auth/[...nextauth]/route";
-import { Items } from "@/models/Items";
 import { NextResponse } from "next/server";
+import { authOptions } from "../auth/[...nextauth]/route";
+import { Items } from "@/models/item.model";
+import { User } from "@/models/user.model";
 
 export const GET = async (req) => {
     try {
-        let responseData;
+        const type = req.nextUrl.searchParams.get("type") || "public";
 
-        const fetchType = req.nextUrl.searchParams.get("type") || "public";
+        let response;
+        await connectDB();
 
-        if (fetchType === "private") {
+        if (type === "public") {
+            response = await Items.find({
+                privacy: "public"
+            }).populate("author", "name email")
+        };
+
+        if (type === "private") {
+
             const session = await getServerSession(authOptions);
             if (!session) {
-                return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
-            }
+                return NextResponse.json('user unAuthorized', { status: 401 })
+            };
 
-            const userId = session.user.userId;
+            const userId = session?.user?.userId;
 
-            // Find all documents for this user where items have privacy set to 'private'
-            responseData = await Items.find(
-                {
-                    "items.privacy": "private"  // Matches all items with privacy set to 'private'
-                },
-            );
-        }
+            response = await Items.find({
+                privacy: "private",
+                author: userId
+            }).populate("author", "name email");
+        };
 
-        if (fetchType === "public") {
-            // Find all documents where at least one item has privacy set to 'public'
-            responseData = await Items.find(
-                {
-                    "items.privacy": "public" // Matches all items with privacy set to 'public'
-                },
-            );
-        }
 
-        return NextResponse.json(responseData, { status: 200 });
+        return NextResponse.json(response, { status: 200 });
     } catch (error) {
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 };
+
+
+export const POST = async (req) => {
+    try {
+
+        const responsedata = await req.json();
+        if (!responsedata) {
+            return NextResponse.json('user unAuthorized', { status: 401 })
+        };
+
+        const session = await getServerSession(authOptions);
+        if (!session) {
+            return NextResponse.json('user unAuthorized', { status: 401 })
+        };
+
+        await connectDB();
+
+        const user = await User.findById(session?.user?.userId);
+        if (!user) {
+            return NextResponse.json('user not found', { status: 404 })
+        }
+
+
+        const newItem = new Items({
+            author: user._id,
+            ...responsedata
+        });
+
+        await newItem.save();
+
+
+    } catch (error) {
+        console.log(error?.message);
+        return NextResponse.json(error.message, { status: 500 })
+    }
+}

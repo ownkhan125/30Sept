@@ -1,8 +1,8 @@
 import { connectDB } from "@/connectDB/connectDB"
-import { Items } from "@/models/Items";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server"
 import { authOptions } from "../auth/[...nextauth]/route";
+import { Items } from "@/models/item.model";
 
 
 
@@ -18,20 +18,21 @@ export const POST = async (req) => {
         }
 
         let user = await Items.findOne({ author: session.user?.userId })
-        if (user) {
-            user.items.push({ name: data.Value, privacy: data.select })
-            await user.save();
-        }
-        else {
+        // if (user) {
+        //     user.push({ content: data.Value, privacy: data.select })
+        //     await user.save();
+        // }
+        // else {
             user = new Items({
                 author: session.user.userId,
-                items: [{ name: data.Value, privacy: data.select }],
+                content: data.Value,
+                privacy: data.select
             })
 
             await user.save();
-        }
+        // }
         // const users = await Items.find();
-        return NextResponse.json(user, { status: 200 })
+        return NextResponse.json('sucessfull', { status: 200 })
     } catch (error) {
         return NextResponse.json(error?.message, { status: 500 })
     }

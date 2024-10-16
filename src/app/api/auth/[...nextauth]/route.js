@@ -1,10 +1,10 @@
 import { connectDB } from "@/connectDB/connectDB";
-import { User } from "@/models/User";
 import { sendVerificationEmail } from "@/utils/sendEmail";
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { signIn } from "next-auth/react";
+import { User } from "@/models/user.model";
 
 export const authOptions = {
   providers: [
