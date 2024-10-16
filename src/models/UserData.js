@@ -2,15 +2,15 @@ import mongoose from 'mongoose'
 
 const UserSchema = new mongoose.Schema({
 
-    owner: {
+    author: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'users'
     },
 
-    email: {
-        type: String,
-        required: true,
+    content : {
+        type : String,
     },
+    
 
     items: [{
         name: {

@@ -11,19 +11,24 @@ export const POST = async (req) => {
         await connectDB();
         const { data } = await req.json();
         console.log('data check... ', data);
+
         const session = await getServerSession(authOptions);
-        let user = await UserData.findOne({ _id: session.user.userId })
+        if (!session) {
+            return NextResponse.json('user not found', { status: 401 })
+        }
+
+        let user = await UserData.findOne({ _id: session.user?.userId })
         if (user) {
+
             user.items.push({ name: data.Value, privacy: data.select })
             await user.save();
         }
         else {
             user = new UserData({
-                _id: session.user.userId,
-                email: session.user.email,
+                author: session.user.userId,
                 items: [{ name: data.Value, privacy: data.select }],
-
             })
+
             await user.save();
         }
         // const users = await UserData.find();
