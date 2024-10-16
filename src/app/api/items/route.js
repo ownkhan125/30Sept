@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/route";
-import { UserData } from "@/models/UserData";
+import { Items } from "@/models/Items";
 import { NextResponse } from "next/server";
 
 export const GET = async (req) => {
@@ -18,7 +18,7 @@ export const GET = async (req) => {
             const userId = session.user.userId;
 
             // Find all documents for this user where items have privacy set to 'private'
-            responseData = await UserData.find(
+            responseData = await Items.find(
                 {
                     "items.privacy": "private"  // Matches all items with privacy set to 'private'
                 },
@@ -27,7 +27,7 @@ export const GET = async (req) => {
 
         if (fetchType === "public") {
             // Find all documents where at least one item has privacy set to 'public'
-            responseData = await UserData.find(
+            responseData = await Items.find(
                 {
                     "items.privacy": "public" // Matches all items with privacy set to 'public'
                 },
