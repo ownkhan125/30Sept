@@ -1,5 +1,5 @@
 import { connectDB } from "@/connectDB/connectDB"
-import { UserData } from "@/models/UserData";
+import { Items } from "@/models/Items";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server"
 import { authOptions } from "../auth/[...nextauth]/route";
@@ -17,21 +17,20 @@ export const POST = async (req) => {
             return NextResponse.json('user not found', { status: 401 })
         }
 
-        let user = await UserData.findOne({ _id: session.user?.userId })
+        let user = await Items.findOne({ author: session.user?.userId })
         if (user) {
-
             user.items.push({ name: data.Value, privacy: data.select })
             await user.save();
         }
         else {
-            user = new UserData({
+            user = new Items({
                 author: session.user.userId,
                 items: [{ name: data.Value, privacy: data.select }],
             })
 
             await user.save();
         }
-        // const users = await UserData.find();
+        // const users = await Items.find();
         return NextResponse.json(user, { status: 200 })
     } catch (error) {
         return NextResponse.json(error?.message, { status: 500 })
@@ -42,7 +41,7 @@ export const GET = async () => {
     try {
         await connectDB();
         const session = await getServerSession(authOptions);
-        const user = await UserData.findOne({ _id: session.user.userId })
+        const user = await Items.findOne({ author: session.user.userId })
         return NextResponse.json(user, { status: 200 })
     } catch (error) {
         return NextResponse.json(error?.message, { status: 500 })

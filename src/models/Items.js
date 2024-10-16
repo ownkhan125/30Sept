@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 
-const UserSchema = new mongoose.Schema({
+const Item = new mongoose.Schema({
 
     author: {
         type: mongoose.Schema.Types.ObjectId,
@@ -31,4 +31,4 @@ const UserSchema = new mongoose.Schema({
 
 }, { timestamps: true });
 
-export const UserData = mongoose.models.userData || mongoose.model('userData', UserSchema)
+export const Items = mongoose.models.Item || mongoose.model('Item', Item)
