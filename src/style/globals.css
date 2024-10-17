@@ -26,6 +26,24 @@ body {
   padding: 5px 16px;
 }
 
+h1,h2,h3{
+  font-weight: 600;
+  line-height: 1.2;
+  color: #9c9a9a;
+}
+
+h1{
+  font-size: 30px;
+}
+
+h2{
+  font-size: 24px;
+}
+
+h3{
+  font-size: 18px;
+}
+
 .card {
   background-color: rgb(231, 231, 231);
   border-radius: 6px;

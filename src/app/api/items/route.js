@@ -11,27 +11,15 @@ export const GET = async (req) => {
 
         let response;
         await connectDB();
-
-        if (type === "public") {
-            response = await Items.find({
-                privacy: "public"
-            }).populate("author", "name email")
+        const session = await getServerSession(authOptions);
+        if (!session) {
+            return NextResponse.json('user unAuthorized', { status: 401 })
         };
+        const userId = session?.user?.userId;
 
-        if (type === "private") {
-
-            const session = await getServerSession(authOptions);
-            if (!session) {
-                return NextResponse.json('user unAuthorized', { status: 401 })
-            };
-
-            const userId = session?.user?.userId;
-
-            response = await Items.find({
-                privacy: "private",
-                author: userId
-            }).populate("author", "name email");
-        };
+        response = await Items.find({
+            author: userId
+        });
 
 
         return NextResponse.json(response, { status: 200 });
@@ -44,8 +32,9 @@ export const GET = async (req) => {
 export const POST = async (req) => {
     try {
 
-        const responsedata = await req.json();
-        if (!responsedata) {
+        const { data } = await req.json();
+        console.log(data);
+        if (!data) {
             return NextResponse.json('user unAuthorized', { status: 401 })
         };
 
@@ -64,12 +53,13 @@ export const POST = async (req) => {
 
         const newItem = new Items({
             author: user._id,
-            ...responsedata
+            content: data.Value,
+            privacy: data.select
         });
 
         await newItem.save();
 
-
+        return NextResponse.json('successfull', { status: 200 })
     } catch (error) {
         console.log(error?.message);
         return NextResponse.json(error.message, { status: 500 })

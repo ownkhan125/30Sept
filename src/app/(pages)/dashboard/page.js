@@ -33,7 +33,7 @@ const page = () => {
     const addItem = async () => {
         const input = document.querySelector('#item');
         try {
-            const res = await fetch('/api/dashboard', {
+            const res = await fetch('/api/items', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
