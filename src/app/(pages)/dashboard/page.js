@@ -19,7 +19,7 @@ const page = () => {
 
     const fetchData = async () => {
         try {
-            const res = await fetch('/api/dashboard', {
+            const res = await fetch('/api/items', {
                 method: 'GET'
             })
             const response = await res.json();
@@ -118,26 +118,20 @@ const page = () => {
                         <h2 className="text-center font-bold">Items Record</h2>
                         <div className="overflow-auto max-h-[300px] designed-scrollbar px-7 my-10">
                             {
-                                item && item.length > 0 ? (
-                                    item.map((data, index) => (
-                                        <div key={index} className="item-card">
-                                            <div>
-                                                <p>{data.content}</p>
-                                                <span className="font-bold text-green-800">{data.privacy}</span>
+                                item.map((data, index) => (
+                                    <div key={index} className="item-card">
+                                        <div><p>{data.content}</p> <span className="font-bold text-green-800">{data.privacy}</span></div>
+                                        <div className="flex gap-2 items-center">
+                                            <div className="p-1 cursor-pointer">
+                                                <FaUserEdit />
                                             </div>
-                                            <div className="flex gap-2 items-center">
-                                                <div className="p-1 cursor-pointer">
-                                                    <FaUserEdit />
-                                                </div>
-                                                <div className="p-1 text-red-700 cursor-pointer">
-                                                    <MdDelete />
-                                                </div>
+
+                                            <div className="p-1 text-red-700 cursor-pointer">
+                                                <MdDelete />
                                             </div>
                                         </div>
-                                    ))
-                                ) : (
-                                    <p>No items available</p>  // Fallback message when item is empty or null
-                                )
+                                    </div>
+                                ))
                             }
                         </div>
                     </div>
