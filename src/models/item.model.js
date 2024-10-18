@@ -14,10 +14,15 @@ const itemSchema = new mongoose.Schema({
         required: true
     },
 
-    privacy : {
-        type : String,
-        enum : ["public" , "private"]
-    }
+    privacy: {
+        type: String,
+        enum: ["public", "private"]
+    },
+
+    favorites: [{
+      type : mongoose.Types.ObjectId,
+      ref : "users"
+    }]
 
 }, { timestamps: true });
 
