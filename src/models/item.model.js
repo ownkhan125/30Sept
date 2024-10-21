@@ -19,10 +19,7 @@ const itemSchema = new mongoose.Schema({
         enum: ["public", "private"]
     },
 
-    favorites: [{
-      type : mongoose.Types.ObjectId,
-      ref : "users"
-    }]
+
 
 }, { timestamps: true });
 

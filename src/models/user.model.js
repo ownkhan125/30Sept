@@ -17,6 +17,10 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    favourites: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "items"
+    }]
     // verifiedEmail: {
     //     type: Boolean,
     //     required: true

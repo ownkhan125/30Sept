@@ -19,7 +19,7 @@ const page = () => {
 
   const favItem = async (id) => {
     try {
-      const res = await fetch('/api/post', {
+      const res = await fetch('/api/items/favourites', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -86,7 +86,7 @@ const page = () => {
 
 
           <div className="w-[20%] sticky top-0">
-            <div className=' w-full bg-[#e7e7e7] rounded-lg p-10 shadow-md animate-pulse'>
+            <div className=' w-full bg-[#e7e7e7] rounded-lg p-10 shadow-md animate-pulse hover:animate-none'>
               <Link href={'/login'}>< button className="btn my-3">Login</button></Link>
               <Link href={'/signup'}>< button className="btn my-3">Sign up</button></Link>
             </div>
