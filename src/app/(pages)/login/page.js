@@ -33,10 +33,10 @@ const page = () => {
             );
 
 
-            if (result?.ok) {
+            if (result.ok) {
                 router.push('/dashboard');
             }
-            else if (result.status) {
+            else if (!result.ok) {
                 alert('incorrect password')
                 setLoading(false)
             }
@@ -94,7 +94,7 @@ const page = () => {
                                 {loading ? <Loading /> : 'Login with Google'}
                             </button>
                         </Suspense>
-                    </div>  
+                    </div>
 
                     <div className="p-2">
                         <Link href={'/forgetpassword'}>< button className="text-blue-800 text-start underline underline-offset-1">Forget Password...?</button></Link>

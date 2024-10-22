@@ -3,8 +3,8 @@ import { sendVerificationEmail } from "@/utils/sendEmail";
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { signIn } from "next-auth/react";
 import { User } from "@/models/user.model";
+import { signIn } from "next-auth/react";
 
 export const authOptions = {
   providers: [
@@ -52,19 +52,19 @@ export const authOptions = {
   callbacks: {
     async signIn({ user, account, profile }) {
       let existingUser = await User.findOne({ email: user.email });
-      user.id = existingUser._id;
+      if (existingUser) {
+        user.id = existingUser._id;
+      }
       if (account.provider === 'google') {
         try {
           await connectDB();
 
           const user = await new User({
-            username: profile.name,
+            name: profile.name,
             email: profile.email,
             password: profile.at_hash
           })
-
           await user.save();
-
         } catch (error) {
           console.log(error.message);
         }
@@ -109,8 +109,10 @@ export const authOptions = {
       } catch (error) {
         console.error("Error sending verification email:", error);
       }
-      return existingUser ? "/auth/sign-in" : true;
+      return existingUser === null ? "/auth/sign-in" : true;
     },
+
+
     async jwt({ token, user }) {
       if (user) {
         token.userId = user.id

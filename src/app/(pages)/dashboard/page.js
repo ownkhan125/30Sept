@@ -14,8 +14,24 @@ const page = () => {
 
 
     useEffect(() => {
-        fetchData()
+        fetchData();
+        // favPost();
     }, []);
+
+    // const favPost = async () => {
+    //     try {
+    //         const res = await fetch('/api/items/fav', {
+    //             method: 'GET'
+    //         })
+    //         const response = await res.json();
+    //         console.log('response', response.favourites);
+    //         setItem(response.favourites)
+    //     } catch (error) {
+    //         console.log('home page :', error.message);
+    //     }
+    // }
+
+
 
     const fetchData = async () => {
         try {

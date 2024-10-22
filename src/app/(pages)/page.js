@@ -9,17 +9,21 @@ import { MdFavoriteBorder, MdOutlineFavorite } from "react-icons/md";
 const page = () => {
   const [data, setData] = useState([]);
   const [show, setShow] = useState(true);
-  const [user, setUser] = useState();
+  const [toggleStates, setToggleStates] = useState([])
   const router = useRouter();
 
 
   const toggle = (id) => {
-    setShow(!show);
-  }
+    setToggleStates((prevState) => ({
+      ...prevState,
+      [id]: !prevState[id]
+    }));
+  };
 
   const favItem = async (id) => {
+    toggle(id)
     try {
-      const res = await fetch('/api/items/favourites', {
+      const res = await fetch(`/api/items/${id}/favourites`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -28,7 +32,7 @@ const page = () => {
       })
       if (res.ok) {
         const response = await res.json();
-        toggle(response._id)
+        console.log('response check', response._id);
       }
       else {
         router.push('/login')
@@ -51,9 +55,23 @@ const page = () => {
         console.log('home page :', error.message);
       }
     }
+
     fetchPost();
   }, [])
 
+
+
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      // timeZoneName: 'short'
+    });
+  };
 
 
   return (
@@ -69,13 +87,13 @@ const page = () => {
                     <div>
                       <h3>Product: <span className="text-blue-800">{items.content}</span></h3>
                       <h3>Creater Name: <span className="text-slate-700">{items.author.name}</span></h3>
-                      <p>Post Date: {items.createdAt}</p>
+                      <h3>Post Date: <span className="text-slate-700">{formatDate(items.createdAt)}</span></h3>
                     </div>
 
                     <div >
                       <button onClick={() => favItem(items._id)}>
-                        <MdFavoriteBorder className={`text-red-600 ${show ? 'block' : 'hidden'}`} />
-                        <MdOutlineFavorite className={`text-red-600 ${show ? 'hidden' : 'block'}`} />
+                        <MdFavoriteBorder className={`text-red-600 ${toggleStates[items._id] ? 'hidden' : 'block'}`} />
+                        <MdOutlineFavorite className={`text-red-600 ${toggleStates[items._id] ? 'block' : 'hidden'}`} />
                       </button>
                     </div>
                   </div>

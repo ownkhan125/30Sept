@@ -18,18 +18,29 @@ const page = () => {
 
 
     const handleSubmitData = async (data) => {
-        console.log(data);
         const inputElement = document.querySelectorAll('input').forEach((ele) => {
             ele.value = '';
         });
-        alert('account register')
-        router.push('/login')
+        const res = await fetch('/api/signup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ data })
+        })
+
+        if (res.ok) {
+            alert('account register')
+            router.push('/login')
+        }
+
+
     }
 
 
 
     const validationSchema = Yup.object().shape({
-        username: Yup.string()
+        name: Yup.string()
             .required('Name is required')
             .min(3, 'Name must be at least 3 characters'),
         email: Yup.string()
@@ -60,7 +71,7 @@ const page = () => {
                         <label className="block text-gray-700 text-sm font-bold mb-2" >
                             Username
                         </label>
-                        <input type='username' placeholder='enter username here...' {...register("username")} />
+                        <input type='name' placeholder='enter username here...' {...register("name")} />
                         {errors.name && <p className="text-red-500">{errors.name.message}</p>}
                     </div>
 
@@ -84,7 +95,7 @@ const page = () => {
                     </div>
 
                     <div className="flex items-center justify-between my-3" >
-                        <button 
+                        <button
                             className="btn"
                             type="submit"
                         >
