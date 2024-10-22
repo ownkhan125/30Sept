@@ -26,21 +26,23 @@ body {
   padding: 5px 16px;
 }
 
-h1,h2,h3{
+h1,
+h2,
+h3 {
   font-weight: 600;
   line-height: 1.2;
   color: #9c9a9a;
 }
 
-h1{
+h1 {
   font-size: 30px;
 }
 
-h2{
+h2 {
   font-size: 24px;
 }
 
-h3{
+h3 {
   font-size: 18px;
 }
 
@@ -49,7 +51,7 @@ h3{
   border-radius: 6px;
   padding: 10px;
   max-width: 500px;
-  margin: auto;
+  margin: 0px auto;
 }
 
 .btn {
@@ -110,7 +112,7 @@ button {
   border-radius: 5px;
   background-color: rgb(231, 231, 231);
   width: 100%;
-  max-height: 400px;
+  max-height: 300px;
   overflow: hidden;
 }
 

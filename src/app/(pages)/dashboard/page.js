@@ -88,51 +88,61 @@ const page = () => {
                 </div> */}
 
                 <div>
-                    <div className="card form-sign">
-                        <div className="w-fit mx-auto"><h1 className="font-semibold">PROFILE PAGE</h1></div>
-                        <h2>Welcome, {session.user.name}!</h2>
-                        <div className="mb-4">
-                            <label className="block text-gray-700 text-sm font-bold mb-2">
-                                Item
-                            </label>
-                            <input
-                                type='text'
-                                placeholder='enter item here...'
-                                id='item'
-                                onChange={handleSubmit}
-                                onKeyDown={(e) => e.key === 'Enter' && addItem()}
-                            />
 
-                            {/* <textarea placeholder="hey" class="text-grey-darkest  p-2 m-1 bg-transparent" name="tt">hello world</textarea> */}
+                    <div className="flex items-stretch ">
+                        <div className="card form-sign">
+                            <div className="w-fit mx-auto"><h1 className="font-semibold">PROFILE PAGE</h1></div>
+                            <h2>Welcome, {session.user.name}!</h2>
+                            <div className="mb-4">
+                                <label className="block text-gray-700 text-sm font-bold mb-2">
+                                    Item
+                                </label>
+                                <input
+                                    type='text'
+                                    placeholder='enter item here...'
+                                    id='item'
+                                    onChange={handleSubmit}
+                                    onKeyDown={(e) => e.key === 'Enter' && addItem()}
+                                />
+
+                                {/* <textarea placeholder="hey" class="text-grey-darkest  p-2 m-1 bg-transparent" name="tt">hello world</textarea> */}
+                            </div>
+
+                            <div className="mb-3">
+                                <select name="privacy" className="w-full p-2 rounded-sm" onChange={handle}>
+                                    <option value="public" id="select">Public</option>
+                                    <option value="private" id="select">Private</option>
+                                </select>
+                            </div>
+
+                            <button className="btn my-2" onClick={() => addItem()}>
+                                Add Item
+                            </button>
+
+                            <button className="btn my-2" onClick={() => {
+                                signOut({
+                                    redirect: true,
+                                    callbackUrl: '/login'
+                                });
+                            }}>
+                                Logout
+                            </button>
                         </div>
 
-                        <div className="mb-3">
-                            <select name="privacy" className="w-full p-2 rounded-sm" onChange={handle}>
-                                <option value="public" id="select">Public</option>
-                                <option value="private" id="select">Private</option>
-                            </select>
+
+
+                        <div className="card">
+                            <div className="w-fit mx-auto"><h1 className="font-semibold">Favourites Post</h1></div>
+                            <h2></h2>
+
                         </div>
-
-                        <button className="btn my-2" onClick={() => addItem()}>
-                            Add Item
-                        </button>
-
-                        <button className="btn my-2" onClick={() => {
-                            signOut({
-                                redirect: true,
-                                callbackUrl: '/login'
-                            });
-                        }}>
-                            Logout
-                        </button>
                     </div>
-
 
 
 
                     <div className="items mt-5">
                         <h2 className="text-center font-bold">Items Record</h2>
-                        <div className="overflow-auto max-h-[300px] designed-scrollbar px-7 my-10">
+                        <div className="overflow-auto max-h-[200px] designed-scrollbar px-7 my-10">
                             {
                                 item.map((data, index) => (
                                     <div key={index} className="item-card">

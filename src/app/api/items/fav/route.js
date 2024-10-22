@@ -20,6 +20,7 @@ export const GET = async () => {
             return NextResponse.json('User not found', { status: 404 });
         }
 
+
         return NextResponse.json(user, { status: 200 })
     } catch (error) {
         return NextResponse.json(error.message, { status: 500 })
