@@ -4,11 +4,14 @@ import Link from "next/link"
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react"
 import { MdFavoriteBorder, MdOutlineFavorite } from "react-icons/md";
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 
 
 const page = () => {
   const [data, setData] = useState([]);
   const [show, setShow] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [toggleStates, setToggleStates] = useState([])
   const router = useRouter();
 
@@ -44,13 +47,17 @@ const page = () => {
   }
 
   useEffect(() => {
+
     const fetchPost = async () => {
+
       try {
         const res = await fetch('/api/post', {
           method: 'GET'
         })
         const response = await res.json();
         setData(response)
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+        setIsLoading(false)
       } catch (error) {
         console.log('home page :', error.message);
       }
@@ -81,16 +88,30 @@ const page = () => {
           <div className="w-[80%] px-5">
             <div className=" w-full bg-[#e7e7e7] border-x border-slate-300 rounded-md shadow-md p-10 ">
               <div className="w-full sticky top-0 bg-[#e7e7e7]"><h2 className="text-center">POST</h2></div>
-              {
-                data.map((items, index) => (
+              {isLoading ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
+                  {Array(data.length || 10).fill(0).map((_, index) => (
+                    <div key={index} className="flex justify-between items-end bg-white border-zinc-100 rounded-md p-3 shadow-md">
+                      <div className="flex-1">
+                        <Skeleton width="20%" height={20} />
+                        <Skeleton width="40%" height={20} />
+                        <Skeleton width="60%" height={20} />
+                      </div>
+                      <div>
+                        <Skeleton circle={true} width={40} height={40} />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                data?.map((items, index) => (
                   <div key={index} className="flex justify-between items-end bg-white border-zinc-100 rounded-md p-3 m-2 shadow-md">
                     <div>
                       <h3>Product: <span className="text-blue-800">{items.content}</span></h3>
                       <h3>Creater Name: <span className="text-slate-700">{items.author.name}</span></h3>
                       <h3>Post Date: <span className="text-slate-700">{formatDate(items.createdAt)}</span></h3>
                     </div>
-
-                    <div >
+                    <div>
                       <button onClick={() => favItem(items._id)}>
                         <MdFavoriteBorder className={`text-red-600 ${toggleStates[items._id] ? 'hidden' : 'block'}`} />
                         <MdOutlineFavorite className={`text-red-600 ${toggleStates[items._id] ? 'block' : 'hidden'}`} />
@@ -98,9 +119,10 @@ const page = () => {
                     </div>
                   </div>
                 ))
-              }
+              )}
+
             </div>
-          </div>
+          </div >
 
 
           <div className="w-[20%] sticky top-0">
@@ -109,8 +131,8 @@ const page = () => {
               <Link href={'/signup'}>< button className="btn my-3">Sign up</button></Link>
             </div>
           </div>
-        </div>
-      </div>
+        </div >
+      </div >
 
     </>
   )

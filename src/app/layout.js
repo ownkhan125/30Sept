@@ -1,13 +1,13 @@
 import NextAuthProvider from '@/providers/NextAuthProvider';
 import '../style/globals.css'
 import { Suspense } from 'react';
-import Loader from '@/components/Loader';
+import Loading from './loading';
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <Suspense fallback={<Loader />}>
+        <Suspense fallback={<Loading />}>
           <NextAuthProvider>
             {children}
           </NextAuthProvider>
