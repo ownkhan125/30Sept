@@ -1,5 +1,7 @@
 'use client'
 
+
+import { useSession } from "next-auth/react";
 import Link from "next/link"
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react"
@@ -8,23 +10,17 @@ import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 
 
+
 const page = () => {
   const [data, setData] = useState([]);
-  const [show, setShow] = useState(true);
+  // const [show, setShow] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
-  const [toggleStates, setToggleStates] = useState([])
+  const [toggleStates, setToggleStates] = useState()
+  const [favourites, setFavourites] = useState()
   const router = useRouter();
 
 
-  const toggle = (id) => {
-    setToggleStates((prevState) => ({
-      ...prevState,
-      [id]: !prevState[id]
-    }));
-  };
-
   const favItem = async (id) => {
-    toggle(id)
     try {
       const res = await fetch(`/api/items/${id}/favourites`, {
         method: 'POST',
@@ -34,22 +30,61 @@ const page = () => {
         body: JSON.stringify({ id })
       })
       if (res.ok) {
-        const response = await res.json();
-        console.log('response check', response._id);
+        setToggleStates(id + 1)
+        // const response = await res.json();
       }
       else {
         router.push('/login')
       }
-
     } catch (error) {
       console.log('home page :', error.message);
     }
   }
 
+  const favDel = async (id) => {
+    try {
+      const res = await fetch(`/api/items/${id}/favourites`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id })
+      })
+      setToggleStates(id + 2)
+
+    } catch (error) {
+      console.log('home page(favDel):', error.message);
+    }
+  }
+
   useEffect(() => {
+    console.log('object own ');
+    const fetchFav = async () => {
+      try {
+        const res = await fetch('/api/items/fav', {
+          method: 'GET'
+        })
+        const response = await res.json();
+        const itemsArray = [];
+        response.favourites.forEach((item) => {
+          itemsArray.push(item._id);
+        });
+        setFavourites(itemsArray)
+      } catch (error) {
+        console.log('fetchFav home page :', error.message);
+      }
+    }
+    fetchFav();
 
+  }, [toggleStates])
+
+
+
+
+
+
+  useEffect(() => {
     const fetchPost = async () => {
-
       try {
         const res = await fetch('/api/post', {
           method: 'GET'
@@ -62,7 +97,6 @@ const page = () => {
         console.log('home page :', error.message);
       }
     }
-
     fetchPost();
   }, [])
 
@@ -79,7 +113,6 @@ const page = () => {
       // timeZoneName: 'short'
     });
   };
-
 
   return (
     <>
@@ -104,22 +137,35 @@ const page = () => {
                   ))}
                 </div>
               ) : (
-                data?.map((items, index) => (
-                  <div key={index} className="flex justify-between items-end bg-white border-zinc-100 rounded-md p-3 m-2 shadow-md">
+                data.map((items, index) => (
+                  <div
+                    key={index}
+                    className="flex justify-between items-end bg-white border-zinc-100 rounded-md p-3 m-2 shadow-md"
+                  >
                     <div>
-                      <h3>Product: <span className="text-blue-800">{items.content}</span></h3>
-                      <h3>Creater Name: <span className="text-slate-700">{items.author.name}</span></h3>
-                      <h3>Post Date: <span className="text-slate-700">{formatDate(items.createdAt)}</span></h3>
+                      <h3>
+                        Product: <span className="text-blue-800">{items.content}</span>
+                      </h3>
+                      <h3>
+                        Creator Name: <span className="text-slate-700">{items.author.name}</span>
+                      </h3>
+                      <h3>
+                        Post Date: <span className="text-slate-700">{formatDate(items.createdAt)}</span>
+                      </h3>
                     </div>
                     <div>
-                      <button onClick={() => favItem(items._id)}>
-                        <MdFavoriteBorder className={`text-red-600 ${toggleStates[items._id] ? 'hidden' : 'block'}`} />
-                        <MdOutlineFavorite className={`text-red-600 ${toggleStates[items._id] ? 'block' : 'hidden'}`} />
+                      <button>
+                        {favourites.includes(items._id) ? (
+                          <MdOutlineFavorite className="icon text-red-600 " onClick={() => favDel(items._id)} />
+                        ) : (
+                          <MdFavoriteBorder className="icon text-red-600" onClick={() => favItem(items._id)} />
+                        )}
                       </button>
                     </div>
                   </div>
                 ))
               )}
+
 
             </div>
           </div >
@@ -137,5 +183,7 @@ const page = () => {
     </>
   )
 }
+
+
 
 export default page
