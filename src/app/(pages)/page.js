@@ -8,6 +8,7 @@ import { useEffect, useState } from "react"
 import { MdFavoriteBorder, MdOutlineFavorite } from "react-icons/md";
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
+import { motion } from "framer-motion";
 
 
 
@@ -156,9 +157,25 @@ const page = () => {
                     <div>
                       <button>
                         {favourites.includes(items._id) ? (
-                          <MdOutlineFavorite className="icon text-red-600 " onClick={() => favDel(items._id)} />
+                          <motion.div
+                            initial={{ scale: 1 }}
+                            animate={{ scale: [1, 1.3, 0.9, 1] }}
+                            transition={{ duration: 0.4, ease: "easeInOut" }}
+                            onClick={() => favDel(items._id)}
+                            className=" text-red-600"
+                          >
+                            <MdOutlineFavorite />
+                          </motion.div>
                         ) : (
-                          <MdFavoriteBorder className="icon text-red-600" onClick={() => favItem(items._id)} />
+                          <motion.div
+                            initial={{ scale: 1, opacity: 1 }}
+                            animate={{ scale: 1.1, opacity: 1 }}
+                            transition={{ duration: 0.2 }}
+                            onClick={() => favItem(items._id)}
+                            className=" text-red-600"
+                          >
+                            <MdFavoriteBorder />
+                          </motion.div>
                         )}
                       </button>
                     </div>
