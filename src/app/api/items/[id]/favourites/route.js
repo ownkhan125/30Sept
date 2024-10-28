@@ -30,7 +30,7 @@ export const POST = async (req, context) => {
             return NextResponse.json(`Not unAuthorized`, { status: 401 })
         }
 
-        if (user.favourites.includes(response._id)) {
+        if (user.favourites?.includes(response._id)) {
             await User.updateOne(
                 { _id: user._id },
                 { $pull: { favourites: response._id } }

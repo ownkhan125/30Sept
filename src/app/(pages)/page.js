@@ -121,7 +121,7 @@ const page = () => {
         <div className="flex items-baseline">
           <div className="w-[80%] px-5">
             <div className=" w-full bg-[#e7e7e7] border-x border-slate-300 rounded-md shadow-md p-10 ">
-              <div className="w-full sticky top-0 bg-[#e7e7e7]"><h2 className="text-center">POST</h2></div>
+              <div className="w-full sticky top-0 bg-[#e7e7e7] z-[99]"><h2 className="text-center">POST</h2></div>
               {isLoading ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
                   {Array(data.length || 10).fill(0).map((_, index) => (
@@ -156,10 +156,10 @@ const page = () => {
                     </div>
                     <div>
                       <button>
-                        {favourites.includes(items._id) ? (
+                        {favourites?.includes(items._id) ? (
                           <motion.div
-                            initial={{ scale: 1 }}
-                            animate={{ scale: [1, 1.3, 0.9, 1] }}
+                            initial={{ scale: 1.1 }}
+                            animate={{ scale: [1.1, 1.5, 0.9, 1.2] }}
                             transition={{ duration: 0.4, ease: "easeInOut" }}
                             onClick={() => favDel(items._id)}
                             className=" text-red-600"
@@ -182,8 +182,6 @@ const page = () => {
                   </div>
                 ))
               )}
-
-
             </div>
           </div >
 
