@@ -129,6 +129,7 @@ const page = () => {
           </div>
 
 
+
           <div className="w-[60%] px-5">
             <div className=" w-full bg-[#e7e7e7] border-x border-slate-300 rounded-md shadow-md p-10 ">
               <div className="w-full sticky top-0 bg-[#e7e7e7] z-[99]"><h2 className="text-center">POST</h2></div>
