@@ -1,7 +1,6 @@
 'use client'
 
 
-import { useSession } from "next-auth/react";
 import Link from "next/link"
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react"
@@ -9,6 +8,7 @@ import { MdFavoriteBorder, MdOutlineFavorite } from "react-icons/md";
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import { motion } from "framer-motion";
+import { useSession } from "next-auth/react";
 
 
 
@@ -19,6 +19,8 @@ const page = () => {
   const [toggleStates, setToggleStates] = useState()
   const [favourites, setFavourites] = useState()
   const router = useRouter();
+  const { data: session, status } = useSession();
+
 
 
   const favItem = async (id) => {
@@ -64,7 +66,7 @@ const page = () => {
       try {
         const res = await fetch('/api/items/fav', {
           method: 'GET'
-        })
+        });
         const response = await res.json();
         const itemsArray = [];
         response.favourites.forEach((item) => {
@@ -118,8 +120,16 @@ const page = () => {
   return (
     <>
       <div className='container-1'>
-        <div className="flex items-baseline">
-          <div className="w-[80%] px-5">
+        <div className="flex items-start">
+
+          <div className="w-[20%] sticky top-0">
+            <div className=' w-full bg-[#e7e7e7] rounded-lg p-10 shadow-md'>
+              <h3>{session?.user.name}</h3>
+            </div>
+          </div>
+
+
+          <div className="w-[60%] px-5">
             <div className=" w-full bg-[#e7e7e7] border-x border-slate-300 rounded-md shadow-md p-10 ">
               <div className="w-full sticky top-0 bg-[#e7e7e7] z-[99]"><h2 className="text-center">POST</h2></div>
               {isLoading ? (
@@ -187,11 +197,13 @@ const page = () => {
 
 
           <div className="w-[20%] sticky top-0">
-            <div className=' w-full bg-[#e7e7e7] rounded-lg p-10 shadow-md animate-pulse hover:animate-none'>
+            <div className=' w-full bg-[#e7e7e7] rounded-lg p-10 shadow-md '>
               <Link href={'/login'}>< button className="btn my-3">Login</button></Link>
               <Link href={'/signup'}>< button className="btn my-3">Sign up</button></Link>
             </div>
-          </div>
+          </div>  
+
+
         </div >
       </div >
 
