@@ -16,6 +16,8 @@ const page = () => {
   const [data, setData] = useState([]);
   // const [show, setShow] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
   const [toggleStates, setToggleStates] = useState()
   const [favourites, setFavourites] = useState()
   const router = useRouter();
@@ -87,22 +89,34 @@ const page = () => {
 
 
   useEffect(() => {
-    const fetchPost = async () => {
+    const fetchPost = async (page) => {
       try {
-        const res = await fetch('/api/post', {
-          method: 'GET'
-        })
+        setIsLoading(true);
+        const res = await fetch(`/api/post?page=${page}`, { method: 'GET' });
         const response = await res.json();
-        setData(response)
-        await new Promise((resolve) => setTimeout(resolve, 1500));
-        setIsLoading(false)
+        setData(response.posts);
+        setHasMore(response.hasMore); // Update hasMore based on response
+        setIsLoading(false);
       } catch (error) {
-        console.log('home page :', error.message);
+        console.log('Error fetching posts:', error.message);
+        setIsLoading(false);
       }
-    }
-    fetchPost();
-  }, [])
+    };
+    fetchPost(page); // Fetch posts for the current page
+  }, [page]);
 
+  const handleNext = () => {
+    if (hasMore) setPage(prevPage => prevPage + 1);
+  };
+
+  const handlePrevious = () => {
+    if (page > 1) setPage(prevPage => prevPage - 1);
+  };
+
+  const secondPage = (pageNumber) => {
+    setPage(pageNumber);
+    router.push(`?page=${pageNumber}`);
+  };
 
 
   const formatDate = (dateString) => {
@@ -121,7 +135,6 @@ const page = () => {
     <>
       <div className='container-1'>
         <div className="flex items-start">
-
           <div className="w-[20%] sticky top-0">
             <div className=' w-full bg-[#e7e7e7] rounded-lg p-10 shadow-md'>
               <h3>{session?.user.name}</h3>
@@ -193,8 +206,20 @@ const page = () => {
                   </div>
                 ))
               )}
+
+              <div className="flex justify-between items-center gap-x-2">
+                <button className="btn" onClick={handlePrevious} disabled={page === 1}>
+                  Previous
+                </button>
+                <button className="btn" onClick={() => secondPage(2)} disabled={page === 2}>
+                  2
+                </button>
+                <button className="btn" onClick={handleNext} disabled={!hasMore}>
+                  Next
+                </button>
+              </div>
             </div>
-          </div >
+          </div>
 
 
           <div className="w-[20%] sticky top-0">
@@ -202,11 +227,11 @@ const page = () => {
               <Link href={'/login'}>< button className="btn my-3">Login</button></Link>
               <Link href={'/signup'}>< button className="btn my-3">Sign up</button></Link>
             </div>
-          </div>  
+          </div>
 
 
-        </div >
-      </div >
+        </div>
+      </div>
 
     </>
   )

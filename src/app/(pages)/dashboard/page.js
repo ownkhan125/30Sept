@@ -1,6 +1,5 @@
 'use client'
 
-import Loading from "@/app/loading";
 import { signOut, useSession } from "next-auth/react";
 import React, { Suspense, useEffect, useState } from "react";
 import { FaUserEdit } from "react-icons/fa";
@@ -78,7 +77,6 @@ const page = () => {
         const select = e.target.value;
         setData({ Value: Value, select: select });
     }
-    // console.log('check data', data);
     if (session) {
         return (
             <div className="container-1">
@@ -88,7 +86,6 @@ const page = () => {
                 </div> */}
 
                 <div>
-
                     <div className="flex items-stretch ">
                         <div className="card form-sign">
                             <div className="w-fit mx-auto"><h1 className="font-semibold">PROFILE PAGE</h1></div>
@@ -129,12 +126,9 @@ const page = () => {
                             </button>
                         </div>
 
-
-
                         <div className="card">
                             <div className="w-fit mx-auto"><h1 className="font-semibold">Favourites Post</h1></div>
                             <h2></h2>
-
                         </div>
                     </div>
 
@@ -151,7 +145,6 @@ const page = () => {
                                             <div className="p-1 cursor-pointer">
                                                 <FaUserEdit />
                                             </div>
-
                                             <div className="p-1 text-red-700 cursor-pointer">
                                                 <MdDelete />
                                             </div>
