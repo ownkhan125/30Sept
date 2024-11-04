@@ -8,7 +8,6 @@ export const GET = async (req) => {
     try {
         const page = parseInt(req.nextUrl.searchParams.get('page')) || 1;
         const limit = 10;
-
         await connectDB();
 
         const totalPosts = await Items.countDocuments({ privacy: "public" });

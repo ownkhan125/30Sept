@@ -16,7 +16,7 @@ const page = () => {
   const [data, setData] = useState([]);
   // const [show, setShow] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState();
   const [hasMore, setHasMore] = useState(true);
   const [toggleStates, setToggleStates] = useState()
   const [favourites, setFavourites] = useState()
@@ -63,7 +63,6 @@ const page = () => {
   }
 
   useEffect(() => {
-    console.log('object own ');
     const fetchFav = async () => {
       try {
         const res = await fetch('/api/items/fav', {
@@ -85,34 +84,47 @@ const page = () => {
 
 
 
-
+  useEffect(() => {
+    if (router.isReady) {
+      console.log('check the page ::');
+      const pageFromUrl = parseInt(router.query) || 1;
+      setPage(pageFromUrl);
+    }
+  }, [router.isReady, router.query]);
 
 
   useEffect(() => {
-    const fetchPost = async (page) => {
+    const fetchPost = async () => {
       try {
         setIsLoading(true);
         const res = await fetch(`/api/post?page=${page}`, { method: 'GET' });
         const response = await res.json();
         setData(response.posts);
-        setHasMore(response.hasMore); // Update hasMore based on response
+        setHasMore(response.hasMore);
         setIsLoading(false);
       } catch (error) {
         console.log('Error fetching posts:', error.message);
         setIsLoading(false);
       }
     };
-    fetchPost(page); // Fetch posts for the current page
+    fetchPost();
   }, [page]);
 
   const handleNext = () => {
-    if (hasMore) setPage(prevPage => prevPage + 1);
+    if (hasMore) {
+      const nextPage = page + 1;
+      setPage(nextPage);
+      router.push(`?page=${nextPage}`, undefined, { shallow: true });
+    }
   };
 
   const handlePrevious = () => {
-    if (page > 1) setPage(prevPage => prevPage - 1);
+    if (page > 1) {
+      const prevPage = page - 1;
+      setPage(prevPage);
+      router.push(`?page=${prevPage}`, undefined, { shallow: true });
+    }
   };
-
   const secondPage = (pageNumber) => {
     setPage(pageNumber);
     router.push(`?page=${pageNumber}`);

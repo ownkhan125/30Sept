@@ -121,7 +121,7 @@ export const authOptions = {
       return token;
     },
     async session({ session, token }) {
-      session.user.userId = token.userId; 
+      session.user.userId = token.userId;
       session.user.email = token.email;
       return session;
     },
