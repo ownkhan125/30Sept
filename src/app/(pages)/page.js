@@ -89,7 +89,7 @@ const page = () => {
       console.log('check the page ::');
       const pageFromUrl = parseInt(router.query) || 1;
       setPage(pageFromUrl);
-    }
+    } 
   }, [router.isReady, router.query]);
 
 
@@ -125,6 +125,7 @@ const page = () => {
       router.push(`?page=${prevPage}`, undefined, { shallow: true });
     }
   };
+
   const secondPage = (pageNumber) => {
     setPage(pageNumber);
     router.push(`?page=${pageNumber}`);
