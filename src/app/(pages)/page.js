@@ -2,7 +2,7 @@
 
 
 import Link from "next/link"
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react"
 import { MdFavoriteBorder, MdOutlineFavorite } from "react-icons/md";
 import Skeleton from 'react-loading-skeleton'
@@ -22,6 +22,8 @@ const page = () => {
   const [favourites, setFavourites] = useState()
   const router = useRouter();
   const { data: session, status } = useSession();
+
+  const params = useSearchParams();
 
 
 
@@ -85,18 +87,17 @@ const page = () => {
 
 
   useEffect(() => {
-    if (router.isReady) {
-      console.log('check the page ::');
-      const pageFromUrl = parseInt(router.query) || 1;
-      setPage(pageFromUrl);
-    } 
-  }, [router.isReady, router.query]);
+
+    const pageFromUrl = params.get("page") || 1;
+    setPage(pageFromUrl);
+  }, [params]);
 
 
   useEffect(() => {
     const fetchPost = async () => {
       try {
         setIsLoading(true);
+
         const res = await fetch(`/api/post?page=${page}`, { method: 'GET' });
         const response = await res.json();
         setData(response.posts);
@@ -114,7 +115,8 @@ const page = () => {
     if (hasMore) {
       const nextPage = page + 1;
       setPage(nextPage);
-      router.push(`?page=${nextPage}`, undefined, { shallow: true });
+      console.log('page check', page);
+      router.push(`?page=${page}`, undefined, { shallow: true });
     }
   };
 
